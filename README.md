@@ -19,6 +19,13 @@ Boost::ASIO low-level redis client (connector)
 
 ## Changelog
 
+### 0.11
+- [feature, possible breakage] add `BOOST_ASIO_NO_DEPRECATED` definition
+for better support boost `v1.74` and modernize boost API usage
+
+### 0.10
+- [bugfix] avoid access to protected destructor (c++17 compatibility)
+
 ### 0.09
 - [bugfix] critical bug in protcol serialization on empty values
 
@@ -162,7 +169,7 @@ using Iterator = typename r::to_iterator<Buffer>::iterator_t;
 ...
 /* establishing connection to redis is outside of bredis */
 asio::ip::tcp::endpoint end_point(
-    asio::ip::address::from_string("127.0.0.1"), port);
+    asio::ip::make_address("127.0.0.1"), port);
 socket_t socket(io_service, end_point.protocol());
 socket.connect(end_point);
 
@@ -231,7 +238,7 @@ using result_t = r::parse_result_mapper_t<Iterator, Policy>;
 ...
 /* establishing the connection to redis is outside of bredis */
 asio::ip::tcp::endpoint end_point(
-    asio::ip::address::from_string("127.0.0.1"), port);
+    asio::ip::make_address("127.0.0.1"), port);
 socket_t socket(io_service, end_point.protocol());
 socket.connect(end_point);
 ...
@@ -464,7 +471,7 @@ outside of the bredis connection.
 using socket_t = asio::ip::tcp::socket;
 using next_layer_t = socket_t &;
 ...
-asio::ip::tcp::endpoint end_point(asio::ip::address::from_string("127.0.0.1"), port);
+asio::ip::tcp::endpoint end_point(asio::ip::make_address("127.0.0.1"), port);
 socket_t socket(io_service, end_point.protocol());
 socket.connect(end_point);
 r::Connection<next_layer_t> c(socket);
@@ -768,6 +775,8 @@ MIT
 - [Stephen Coleman](https://github.com/omegacoleman)
 - [maxtorm miximtor](https://github.com/miximtor)
 - [Ronny Nowak](https://github.com/dargun)
+- [Stephen Chisholm](https://github.com/sbchisholm)
+- [amensel](https://github.com/amensel)
 
 ## See also
 - https://github.com/Cylix/cpp_redis
